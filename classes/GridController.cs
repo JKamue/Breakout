@@ -52,6 +52,10 @@ namespace Breakout
             var distanceTop = this.Top + coord.Y * this.BlockSize.Height;
             var distanceLeft = this.Left + coord.X * this.BlockSize.Width;
 
+            if (this.Grid[coord.X, coord.Y] != null)
+            {
+                this.Screen.Controls.Remove(this.Grid[coord.X, coord.Y]);
+            }
             var block = new Block(distanceTop, distanceLeft, this.BlockSize, color, breakable, speedAfterCollision);
             this.Grid[coord.X, coord.Y] = block;
             this.Screen.Controls.Add(block);
