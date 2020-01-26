@@ -60,8 +60,10 @@
     <Compile Include="classes\Player.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="dtos\BallDto.cs" />
     <Compile Include="dtos\BlockDto.cs" />
     <Compile Include="dtos\GridDto.cs" />
+    <Compile Include="dtos\PlayerDto.cs" />
     <Compile Include="exceptions\CoordinatesOutOfBoundsException.cs" />
     <Compile Include="Screen.cs">
       <SubType>Form</SubType>

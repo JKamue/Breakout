@@ -15,8 +15,10 @@ namespace Breakout.dtos
         public int height;
         public int pxWidth;
         public int pxHeight;
+        public List<BallDto> balls;
+        public PlayerDto player;
 
-        public GridDto(List<BlockDto> blocks, Color backColor, int width, int height, int pxWidth, int pxHeight)
+        public GridDto(List<BlockDto> blocks, Color backColor, int width, int height, int pxWidth, int pxHeight, List<BallDto> balls, PlayerDto player)
         {
             this.blocks = blocks;
             this.backColor = backColor;
@@ -24,6 +26,8 @@ namespace Breakout.dtos
             this.height = height;
             this.pxWidth = pxWidth;
             this.pxHeight = pxHeight;
+            this.balls = balls;
+            this.player = player;
         }
     }
 }
