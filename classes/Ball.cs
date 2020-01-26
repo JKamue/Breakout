@@ -52,6 +52,11 @@ namespace Breakout.classes
             Clock.Enabled = true;
         }
 
+        public void Stop()
+        {
+            Clock.Stop();
+        }
+
         private void CheckIfBallLeavingScreen(object sender, EventArgs e)
         {
             if (Top + Height + 30 > this.Form.Height)
@@ -77,8 +82,8 @@ namespace Breakout.classes
 
         private void UpdatePosition(object sender, EventArgs e)
         {
-            Top += (int)Math.Round(VecY * Velocity * DirY);
-            Left += (int) Math.Round(VecX * Velocity * DirX);
+            Top += (int)Math.Round(VecY * (Velocity + 2) * DirY);
+            Left += (int) Math.Round(VecX * (Velocity + 2) * DirX);
         }
 
         private bool CheckObjectForCollision(Block other)
@@ -92,8 +97,7 @@ namespace Breakout.classes
                 }
                 if (other.Breakable)
                 {
-                    this.Form.Controls.Remove(other);
-                    other.Broken = true;
+                    GridController.BreakBlock(other);
                     if (this.Velocity < other.SpeedAfterCollision)
                     {
                         this.Velocity = other.SpeedAfterCollision;

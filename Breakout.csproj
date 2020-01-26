@@ -55,6 +55,7 @@
     <Compile Include="classes\Block.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="classes\Game.cs" />
     <Compile Include="classes\GridCoordinate.cs" />
     <Compile Include="classes\GridController.cs" />
     <Compile Include="classes\Player.cs">

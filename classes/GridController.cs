@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,6 +21,11 @@ namespace Breakout
 
         private int Rows;
         private int Cols;
+
+        private int BreakableBlocks;
+        private int BrokenBlocks;
+
+        public bool GameOver() => BrokenBlocks == BreakableBlocks;
 
         public Block[,] Grid { get; private set; }
 
@@ -40,6 +46,18 @@ namespace Breakout
             this.BlockSize = new Size(width / cols, height / rows);
 
             this.Grid = new Block[cols,rows];
+        }
+
+        public void SelfDestruct()
+        {
+            foreach (var block in Grid)
+            {
+                if (block == null)
+                {
+                    continue;
+                }
+                Screen.Controls.Remove(block);
+            }
         }
 
         public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision)
@@ -70,6 +88,18 @@ namespace Breakout
             var block = new Block(distanceTop, distanceLeft, realBlockSize, color, breakable, speedAfterCollision);
             this.Grid[coord.X, coord.Y] = block;
             this.Screen.Controls.Add(block);
+
+            if (breakable)
+            {
+                BreakableBlocks++;
+            }
+        }
+
+        public void BreakBlock(Block block)
+        {
+            Screen.Controls.Remove(block);
+            block.Broken = true;
+            BrokenBlocks++;
         }
 
         public bool CoordinateInGrid(GridCoordinate coord)

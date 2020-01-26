@@ -15,20 +15,29 @@ namespace Breakout.classes
         private int maxLeft;
         private int maxRight;
 
+        private Form Form;
+
         public Player(Form form, int maxLeft, int maxRight, int distanceTop, int distanceLeft,
             Size size, Color color, bool breakable, int speedAfterCollision)
             : base(distanceTop, distanceLeft, size, color, breakable, speedAfterCollision)
         {
-            form.KeyDown += new KeyEventHandler(this.KeyPressed);
-            form.Controls.Add(this);
+            Form = form;
+            Form.KeyDown += new KeyEventHandler(this.KeyPressed);
+            Form.Controls.Add(this);
 
-            form.MouseMove += new MouseEventHandler(this.syncWithMouse);
+            Form.MouseMove += new MouseEventHandler(this.SyncWithMouse);
 
             this.maxLeft = maxLeft;
             this.maxRight = maxRight;
         }
 
-        public void syncWithMouse(object sender, MouseEventArgs e)
+        public void EndGame()
+        {
+            Form.MouseMove -= new MouseEventHandler(this.SyncWithMouse);
+            Form.KeyDown -= new KeyEventHandler(this.KeyPressed);
+        }
+
+        public void SyncWithMouse(object sender, MouseEventArgs e)
         {
             if (e.X < maxRight && e.X > maxLeft)
             {
