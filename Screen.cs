@@ -17,18 +17,6 @@ namespace Breakout
     {
 
         private GridController gridController;
-        private Timer clock;
-
-        private Block ball;
-        private Block other;
-
-        private Timer timer;
-
-        private int vecX = -7;
-        private int vecY = -7;
-
-        private int posY = 260;
-        private int posX = 360;
 
         public Screen()
         {
@@ -61,133 +49,12 @@ namespace Breakout
                     block.rowspan);
             }
 
-            createBall();
-            startTimer();
-        }
-
-        private void createBall()
-        {
-            ball = new Block(0, 0, new Size(15, 15), Color.Red, false, 1);
-            this.Controls.Add(ball);
-        }
-
-        private void startTimer()
-        {
-            clock = new Timer();
-            clock.Tick += new System.EventHandler(this.checkIfBallLeavingScreen);
-            clock.Tick += new System.EventHandler(this.detectCollisions);
-            clock.Tick += new System.EventHandler(this.updatePosition);
-            clock.Interval = 10;
-            clock.Enabled = true;
-        }
-
-        private void checkIfBallLeavingScreen(object sender, EventArgs e)
-        {
-            if (ball.Top + ball.Height + 30 > this.Height)
-            {
-                this.vecX *= -1;
-            }
-            if (ball.Left + ball.Width + 10 > this.Width)
-            {
-                this.vecY *= -1;
-            }
-            if (ball.Top < 0)
-            {
-                this.vecX *= -1;
-            }
-            if (ball.Left < 0)
-            {
-                this.vecY *= -1;
-            }
-        }
-
-        private void updatePosition(object sender, EventArgs e)
-        {
-            this.posY += this.vecX;
-            this.posX += this.vecY;
-            ball.Top = posY;
-            ball.Left = posX;
-        }
-
-        private void detectCollisions(object sender, EventArgs e)
-        {
-            foreach (var other in this.gridController.Grid)
-            {
-                if (other == null)
-                {
-                    continue;
-                }
-                if (ball.Bounds.IntersectsWith(other.Bounds))
-                {
-                    if (other.Broken)
-                    {
-                        continue;
-                    }
-                    if (other.Breakable)
-                    {
-                        this.Controls.Remove(other);
-                        other.Broken = true;
-                    }
-
-
-                    // Calculate
-                    var dist1 = 100;
-                    var dist2 = 100;
-                    var dist3 = 100;
-                    var dist4 = 100;
-
-                    var bounds = ball.Bounds;
-
-                    var rect1 = new Rectangle(bounds.X, bounds.Y, bounds.Width, 1);
-                    var rect2 = new Rectangle(bounds.X + bounds.Width, bounds.Y, 1, bounds.Height);
-                    var rect3 = new Rectangle(bounds.X, bounds.Y + bounds.Height, bounds.Width, 1);
-                    var rect4 = new Rectangle(bounds.X, bounds.Y, 1, bounds.Height);
-
-                    if (rect1.IntersectsWith(other.Bounds))
-                    {
-                        dist1 = other.Bounds.Y + other.Bounds.Height - bounds.Y;
-                    }
-
-                    if (rect2.IntersectsWith(other.Bounds))
-                    {
-                        dist2 = bounds.X + bounds.Width - other.Bounds.X;
-                    }
-
-                    if (rect3.IntersectsWith(other.Bounds))
-                    {
-                        dist3 = bounds.Y + bounds.Height - other.Bounds.Y;
-                    }
-
-                    if (rect4.IntersectsWith(other.Bounds))
-                    {
-                        dist4 = other.Bounds.X + other.Bounds.Width - bounds.X;
-                    }
-
-                    if (dist3 < dist2 && dist3 < dist1 && dist3 < dist4)
-                    {
-                        this.vecX *= -1;
-                        break;
-                    }
-
-                    if (dist2 <= dist3 && dist2 <= dist1 && dist2 < dist4)
-                    {
-                        this.vecY *= -1;
-                        break;
-                    }
-
-                    if (dist1 < dist3 && dist1 < dist2 && dist1 < dist4)
-                    {
-                        this.vecX *= -1;
-                        break;
-                    }
-
-                    if (dist4 <= dist3 && dist4 < dist2 && dist4 <= dist1)
-                    {
-                        this.vecY *= -1;
-                        break;
-                    }
-                }
-            }
+            var ball2 = new Ball(this, this.gridController, 5, 1, 1, -1, -1,
+                260, 300, new Size(15, 15), Color.Red, false, 1);
+            var ball3 = new Ball(this, this.gridController, 7, 1, 1, -1, -1,
+                260, 350, new Size(5, 5), Color.Yellow, false, 1);
+            var ball4 = new Ball(this, this.gridController, 3, 2.5, 1, -1, -1,
+                260, 400, new Size(30, 30), Color.Orange, false, 1);
         }
     }
 }
