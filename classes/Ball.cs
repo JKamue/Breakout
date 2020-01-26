@@ -178,9 +178,6 @@ namespace Breakout.classes
                 VecX = forceX;
                 VecY = forceY;
 
-                var label = Form.Controls.Find("label2", true);
-                label[0].Text = (Math.Pow(forceX,2) + Math.Pow(forceY, 2)).ToString();
-
                 if (direction < 0)
                 {
                     this.DirX = -1;
