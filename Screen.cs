@@ -52,7 +52,7 @@ namespace Breakout
 
             var playerDto = grid.player;
             var player = new Player(this, playerDto.maxLeft, playerDto.maxRight, playerDto.distanceTop, playerDto.distanceLeft, new Size(playerDto.width, playerDto.height), playerDto.color,
-                false, 1);
+                false, 10);
 
             var rand = new Random();
             foreach (var ballDto in grid.balls)
@@ -60,7 +60,7 @@ namespace Breakout
                 var distanceTop = rand.Next(ballDto.spawnYmin, ballDto.spawnYmax);
                 var distanceLeft = rand.Next(ballDto.spawnXmin, ballDto.spawnXmax);
 
-                var ball = new Ball(this, this.gridController, player, ballDto.startVelocity, 1, 1, -1, -1,
+                var ball = new Ball(this, this.gridController, player, ballDto.startVelocity, 0.7, 0.7, -1, -1,
                     distanceTop, distanceLeft, new Size(ballDto.size, ballDto.size), ballDto.color, false, 1);
             }
             /**var ball3 = new Ball(this, this.gridController, 7, 1, 1, -1, -1,

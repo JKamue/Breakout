@@ -81,14 +81,14 @@ namespace Breakout.classes
             Left += (int) Math.Round(VecX * Velocity * DirX);
         }
 
-        private void CheckObjectForCollision(Block other)
+        private bool CheckObjectForCollision(Block other)
         {
             var bounds = this.Bounds;
             if (bounds.IntersectsWith(other.Bounds))
             {
                 if (other.Broken)
                 {
-                    return;
+                    return false;
                 }
                 if (other.Breakable)
                 {
@@ -141,7 +141,11 @@ namespace Breakout.classes
                 {
                     DirX = 1;
                 }
+
+                return true;
             }
+
+            return false;
         }
 
         private void DetectCollisions(object sender, EventArgs e)
@@ -153,7 +157,41 @@ namespace Breakout.classes
                     this.CheckObjectForCollision(other);
                 }
             }
-            this.CheckObjectForCollision(Player);
+
+            if (this.Bounds.IntersectsWith(Player.Bounds))
+            {
+                // Check if ball hit side
+                if (Top + Height > Player.Top + 8)
+                {
+                    return;
+                }
+
+                var bleft = Left + 0.5 * Width;
+
+                var leftDiff = bleft - Player.Left;
+                var point = Math.Round(leftDiff - 0.5 * Player.Width);
+
+                var direction = point / Player.Width;
+                var forceX = 2 * Math.Abs(point / Player.Width);
+                var forceY = Math.Sqrt(1 - Math.Pow(forceX, 2));
+
+                VecX = forceX;
+                VecY = forceY;
+
+                var label = Form.Controls.Find("label2", true);
+                label[0].Text = (Math.Pow(forceX,2) + Math.Pow(forceY, 2)).ToString();
+
+                if (direction < 0)
+                {
+                    this.DirX = -1;
+                }
+                else
+                {
+                    this.DirX = 1;
+                }
+
+                this.DirY = -1;
+            }
         }
     }
 }

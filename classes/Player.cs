@@ -40,15 +40,23 @@ namespace Breakout.classes
         {
             if (e.KeyData == Keys.Left)
             {
-                if (Left > maxLeft)
+                if (Left - 50 > maxLeft)
                 {
                     Left -= 50;
                 }
+                else
+                {
+                    Left = maxLeft;
+                }
             } else if (e.KeyData == Keys.Right)
             {
-                if (Left < maxRight)
+                if (Left + 50 < maxRight)
                 {
                     Left += 50;
+                }
+                else
+                {
+                    Left = maxRight;
                 }
             }
         }
