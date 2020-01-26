@@ -15,6 +15,8 @@ namespace Breakout.classes
         private int maxLeft;
         private int maxRight;
 
+        public int Misses;
+
         private Form Form;
 
         public Player(Form form, int maxLeft, int maxRight, int distanceTop, int distanceLeft,

@@ -17,6 +17,9 @@ namespace Breakout.classes
         private int DirX;
         private int DirY;
 
+        private int SpawnX;
+        private int SpawnY;
+
         private Form Form;
         private GridController GridController;
         private Timer Clock;
@@ -33,6 +36,9 @@ namespace Breakout.classes
             this.VecY = vecY;
             this.DirX = dirX;
             this.DirY = dirY;
+
+            this.SpawnY = distanceTop;
+            this.SpawnX = distanceLeft;
 
             this.Form = form;
             this.GridController = grid;
@@ -62,6 +68,9 @@ namespace Breakout.classes
             if (Top + Height + 30 > this.Form.Height)
             {
                 DirY = -1;
+                Player.Misses++;
+                Top = SpawnY;
+                Left = SpawnX;
             }
 
             if (Left + Width + 10 > this.Form.Width)

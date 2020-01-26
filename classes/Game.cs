@@ -20,9 +20,12 @@ namespace Breakout.classes
         private Timer GameTimer;
         private Stopwatch Stopwatch;
 
+        private int Lives;
+
         public Game(string gameSettings, Screen form)
         {
             Form = form;
+
             var grid = JsonConvert.DeserializeObject<GridDto>(gameSettings);
             GenerateField(grid);
             GeneratePlayer(grid.player);
@@ -31,6 +34,8 @@ namespace Breakout.classes
             StartGameTimer();
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
+
+            Lives = grid.lives;
         }
 
         private void StartGameTimer()
@@ -43,7 +48,7 @@ namespace Breakout.classes
 
         private void CheckIfGameOver(object sender, EventArgs e)
         {
-            if (GridController.GameOver())
+            if (GridController.GameOver() || Player.Misses == Lives)
             {
                 StopGame();
             }
@@ -62,7 +67,16 @@ namespace Breakout.classes
             var sec = Stopwatch.Elapsed.Seconds;
             var min = Stopwatch.Elapsed.Minutes;
 
-            MessageBox.Show($"Sie haben gewonnen! Sie haven {min} Minuten {sec} Sekunden gespielt!", "Herzlichen Glückwunsch!");
+            if (GridController.GameOver())
+            {
+                MessageBox.Show($"Sie haben gewonnen! Sie haven {min} Minuten {sec} Sekunden gespielt!",
+                    "Herzlichen Glückwunsch!");
+            }
+            else
+            {
+                MessageBox.Show($"Sie haben verloren!",
+                    "Nächstes Mal vielleicht!");
+            }
 
             Form.Controls.Remove(Player);
 
