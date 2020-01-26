@@ -163,6 +163,7 @@ namespace Breakout.classes
                 // Check if ball hit side
                 if (Top + Height > Player.Top + 8)
                 {
+                    CheckObjectForCollision(Player);
                     return;
                 }
 
