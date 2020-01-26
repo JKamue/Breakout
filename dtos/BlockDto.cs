@@ -14,14 +14,18 @@ namespace Breakout.dtos
         public Color color;
         public bool breaks;
         public int speed;
+        public int colspan;
+        public int rowspan;
 
-        public BlockDto(int x, int y, Color color, bool breaks, int speed)
+        public BlockDto(int x, int y, Color color, bool breaks, int speed, int colspan, int rowspan)
         {
             this.x = x;
             this.y = y;
             this.color = color;
             this.breaks = breaks;
             this.speed = speed;
+            this.colspan = colspan;
+            this.rowspan = rowspan;
         }
     }
 }

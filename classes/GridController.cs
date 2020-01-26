@@ -44,6 +44,12 @@ namespace Breakout
 
         public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision)
         {
+            this.AddBlock(coord, color, breakable, speedAfterCollision, 1, 1);
+        }
+
+        public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision, int colspan,
+            int rowspan)
+        {
             if (!CoordinateInGrid(coord))
             {
                 throw new CoordinatesOutOfBoundsException($"Coordinate {coord.X}/{coord.Y} is not in Grid {this.Cols - 1}/{this.Rows - 1}");
@@ -56,7 +62,12 @@ namespace Breakout
             {
                 this.Screen.Controls.Remove(this.Grid[coord.X, coord.Y]);
             }
-            var block = new Block(distanceTop, distanceLeft, this.BlockSize, color, breakable, speedAfterCollision);
+            
+            var realBlockSize = new Size(
+                this.BlockSize.Width * colspan,
+                this.BlockSize.Height * rowspan);
+
+            var block = new Block(distanceTop, distanceLeft, realBlockSize, color, breakable, speedAfterCollision);
             this.Grid[coord.X, coord.Y] = block;
             this.Screen.Controls.Add(block);
         }

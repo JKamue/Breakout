@@ -15,20 +15,34 @@ namespace Breakout
 {
     public partial class Screen : Form
     {
+
+        private GridController gridController;
+        private Timer clock;
+
+        private Block ball;
+        private Block other;
+
+        private Timer timer;
+
+        private int vecX = -7;
+        private int vecY = -7;
+
+        private int posY = 260;
+        private int posX = 360;
+
         public Screen()
         {
             InitializeComponent();
-        }
-
-        private void Screen_Load(object sender, EventArgs e)
-        {
-            var gameSettings = "{ \r\nwidth: 21,\r\nheight: 21,\r\npxWidth: 750,\r\npxHeight: 500,\r\nbackColor: \"#000000\",\r\nblocks: [\r\n    {\"x\": 0,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 1,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 2,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 3,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 4,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 5,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 6,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 7,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 8,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 9,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 10,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 11,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 12,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 13,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 14,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 15,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 16,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 17,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 18,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 0,\"y\": 19,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n\t\r\n\t{\"x\": 20,\"y\": 1,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 2,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 3,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 4,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 5,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 6,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 7,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 8,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 9,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 10,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 11,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 12,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 13,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 14,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 15,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 16,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 17,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 18,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 19,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n\t\r\n    {\"x\": 1,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 2,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 3,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 4,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 5,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 6,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 7,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 8,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 9,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 10,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 11,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 12,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 13,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 14,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 15,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 16,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 17,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 18,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 19,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n    {\"x\": 20,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 1},\r\n\t\r\n    {\"x\": 1,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 2,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 3,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 4,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 5,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 6,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 7,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 8,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 9,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 10,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 11,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 12,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 13,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 14,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 15,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 16,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 17,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 18,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n    {\"x\": 19,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 5},\r\n\t\r\n    {\"x\": 1,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 2,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 3,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 4,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 5,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 6,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 7,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 8,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 9,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 10,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 11,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 12,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 13,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 14,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 15,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 16,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 17,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 18,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n    {\"x\": 19,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 4},\r\n\t\r\n    {\"x\": 1,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 2,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 3,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 4,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 5,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 6,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 7,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 8,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 9,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 10,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 11,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 12,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 13,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 14,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 15,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 16,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 17,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 18,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n    {\"x\": 19,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 3},\r\n\t\r\n    {\"x\": 1,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 2,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 3,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 4,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 5,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 6,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 7,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 8,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 9,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 10,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 11,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 12,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 13,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 14,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 15,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 16,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 17,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 18,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n    {\"x\": 19,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 2},\r\n\t\r\n    {\"x\": 1,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 2,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 3,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 4,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 5,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 6,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 7,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 8,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 9,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 10,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 11,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 12,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 13,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 14,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 15,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 16,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 17,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 18,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n    {\"x\": 19,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1},\r\n]}";
-            var grid = JsonConvert.DeserializeObject<GridDto>(gameSettings);
-
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
+        }
+
+        private void Screen_Load(object sender, EventArgs e)
+        {
+            var gameSettings = "{ \r\nwidth: 21,\r\nheight: 21,\r\npxWidth: 1000,\r\npxHeight: 500,\r\nbackColor: \"#000000\",\r\nblocks: [\r\n    {\"x\": 0,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 0, \"colspan\": 1, \"rowspan\":21},\r\n\t\r\n\t{\"x\": 20,\"y\": 1,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 0, \"colspan\": 1, \"rowspan\":21},\r\n\t\r\n    {\"x\": 1,\"y\": 0,\"color\": \"#8e8e8e\",\"breaks\": false,\"speed\": 0, \"colspan\": 20, \"rowspan\":1},\r\n\t\r\n    {\"x\": 1,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 2,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 3,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 4,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 5,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 6,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 7,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 8,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 9,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 10,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 11,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 12,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 13,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 14,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 15,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 16,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 17,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 18,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 19,\"y\": 4,\"color\": \"#c84848\",\"breaks\": true,\"speed\": 3, \"colspan\": 1, \"rowspan\":1},\r\n\t\r\n    {\"x\": 1,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 2,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 3,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 4,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 5,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 6,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 7,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 8,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 9,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 10,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 11,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 12,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 13,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 14,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 15,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 16,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 17,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 18,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 19,\"y\": 5,\"color\": \"#c66c3a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n\t\r\n    {\"x\": 1,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 2,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 3,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 4,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 5,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 6,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 7,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 8,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 9,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 10,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 11,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 12,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 13,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 14,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 15,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 16,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 17,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 18,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 19,\"y\": 6,\"color\": \"#a2a22a\",\"breaks\": true,\"speed\": 2, \"colspan\": 1, \"rowspan\":1},\r\n\t\r\n    {\"x\": 1,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 2,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 3,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 4,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 5,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 6,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 7,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 8,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 9,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 10,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 11,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 12,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 13,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 14,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 15,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 16,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 17,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 18,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 19,\"y\": 7,\"color\": \"#48a048\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n\t\r\n    {\"x\": 1,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 2,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 3,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 4,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 5,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 6,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 7,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 8,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 9,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 10,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 11,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 12,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 13,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 14,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 15,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 16,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 17,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 18,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n    {\"x\": 19,\"y\": 8,\"color\": \"#4248c8\",\"breaks\": true,\"speed\": 1, \"colspan\": 1, \"rowspan\":1},\r\n]}";
+            var grid = JsonConvert.DeserializeObject<GridDto>(gameSettings);
 
             this.BackColor = grid.backColor;
             this.Width = grid.pxWidth;
@@ -42,42 +56,33 @@ namespace Breakout
                     new GridCoordinate(block.x, block.y),
                     block.color,
                     block.breaks,
-                    block.speed);
+                    block.speed,
+                    block.colspan,
+                    block.rowspan);
             }
 
-            this.timer = new Timer();
-            this.timer.Tick += new System.EventHandler(this.UpdateBallPosition);
-            this.timer.Interval = 10;
-            this.timer.Enabled = true;
-
-            ball = new Block(0,0, new Size(15,15), Color.Red, false, 1);
-            //other = new Block(200,250, new Size(150, 80), Color.Blue,false, 1);
-            this.Controls.Add(ball);
-            this.Controls.Add(other);
+            createBall();
+            startTimer();
         }
 
-        private GridController gridController;
-
-        private Block ball;
-        private Block other;
-
-        private Timer timer;
-
-        private int vecX = -1;
-        private int vecY = -1;
-
-        private int posY = 260;
-        private int posX = 360;
-        /**private int posY = 260;
-        private int posX = 360;**/
-
-        private void UpdateBallPosition(object sender, EventArgs e)
+        private void createBall()
         {
-            this.posY += this.vecX;
-            this.posX += this.vecY;
-            ball.Top = posY;
-            ball.Left = posX;
+            ball = new Block(0, 0, new Size(15, 15), Color.Red, false, 1);
+            this.Controls.Add(ball);
+        }
 
+        private void startTimer()
+        {
+            clock = new Timer();
+            clock.Tick += new System.EventHandler(this.checkIfBallLeavingScreen);
+            clock.Tick += new System.EventHandler(this.detectCollisions);
+            clock.Tick += new System.EventHandler(this.updatePosition);
+            clock.Interval = 10;
+            clock.Enabled = true;
+        }
+
+        private void checkIfBallLeavingScreen(object sender, EventArgs e)
+        {
             if (ball.Top + ball.Height + 30 > this.Height)
             {
                 this.vecX *= -1;
@@ -94,8 +99,19 @@ namespace Breakout
             {
                 this.vecY *= -1;
             }
+        }
 
-           foreach (var other in this.gridController.Grid)
+        private void updatePosition(object sender, EventArgs e)
+        {
+            this.posY += this.vecX;
+            this.posX += this.vecY;
+            ball.Top = posY;
+            ball.Left = posX;
+        }
+
+        private void detectCollisions(object sender, EventArgs e)
+        {
+            foreach (var other in this.gridController.Grid)
             {
                 if (other == null)
                 {
@@ -150,24 +166,26 @@ namespace Breakout
                     if (dist3 < dist2 && dist3 < dist1 && dist3 < dist4)
                     {
                         this.vecX *= -1;
+                        break;
                     }
 
-                    if (dist2 < dist3 && dist2 < dist1 && dist2 < dist4)
+                    if (dist2 <= dist3 && dist2 <= dist1 && dist2 < dist4)
                     {
                         this.vecY *= -1;
+                        break;
                     }
 
                     if (dist1 < dist3 && dist1 < dist2 && dist1 < dist4)
                     {
                         this.vecX *= -1;
+                        break;
                     }
 
-                    if (dist4 < dist3 && dist4 < dist2 && dist4 < dist1)
+                    if (dist4 <= dist3 && dist4 < dist2 && dist4 <= dist1)
                     {
                         this.vecY *= -1;
+                        break;
                     }
-
-                    break;
                 }
             }
         }
