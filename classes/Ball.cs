@@ -172,7 +172,8 @@ namespace Breakout.classes
                 var point = Math.Round(leftDiff - 0.5 * Player.Width);
 
                 var direction = point / Player.Width;
-                var forceX = 2 * Math.Abs(point / Player.Width);
+                //var forceX = 2 * Math.Abs(point / Player.Width); old equation with f(x) = 2|x|
+                var forceX = 0.2 * point / Player.Width + 0.6; // new equation = f(x) = 0.2 x^2 + 0.6
                 var forceY = Math.Sqrt(1 - Math.Pow(forceX, 2));
 
                 VecX = forceX;
