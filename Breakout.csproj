@@ -57,6 +57,9 @@
     </Compile>
     <Compile Include="classes\GridCoordinate.cs" />
     <Compile Include="classes\GridController.cs" />
+    <Compile Include="classes\Player.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="dtos\BlockDto.cs" />
     <Compile Include="dtos\GridDto.cs" />
     <Compile Include="exceptions\CoordinatesOutOfBoundsException.cs" />
