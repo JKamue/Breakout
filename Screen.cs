@@ -34,15 +34,141 @@ namespace Breakout
             this.Width = grid.pxWidth;
             this.Height = grid.pxHeight;
 
-            var gridController = new GridController(this, grid.pxWidth, grid.pxHeight, 0, 0, grid.height, grid.width);
+            this.gridController = new GridController(this, grid.pxWidth, grid.pxHeight, 0, 0, grid.height, grid.width);
 
             foreach (var block in grid.blocks)
             {
-                gridController.AddBlock(
+                this.gridController.AddBlock(
                     new GridCoordinate(block.x, block.y),
                     block.color,
                     block.breaks,
                     block.speed);
+            }
+
+            this.timer = new Timer();
+            this.timer.Tick += new System.EventHandler(this.UpdateBallPosition);
+            this.timer.Interval = 10;
+            this.timer.Enabled = true;
+
+            ball = new Block(0,0, new Size(15,15), Color.Red, false, 1);
+            //other = new Block(200,250, new Size(150, 80), Color.Blue,false, 1);
+            this.Controls.Add(ball);
+            this.Controls.Add(other);
+        }
+
+        private GridController gridController;
+
+        private Block ball;
+        private Block other;
+
+        private Timer timer;
+
+        private int vecX = -1;
+        private int vecY = -1;
+
+        private int posY = 260;
+        private int posX = 360;
+        /**private int posY = 260;
+        private int posX = 360;**/
+
+        private void UpdateBallPosition(object sender, EventArgs e)
+        {
+            this.posY += this.vecX;
+            this.posX += this.vecY;
+            ball.Top = posY;
+            ball.Left = posX;
+
+            if (ball.Top + ball.Height + 30 > this.Height)
+            {
+                this.vecX *= -1;
+            }
+            if (ball.Left + ball.Width + 10 > this.Width)
+            {
+                this.vecY *= -1;
+            }
+            if (ball.Top < 0)
+            {
+                this.vecX *= -1;
+            }
+            if (ball.Left < 0)
+            {
+                this.vecY *= -1;
+            }
+
+           foreach (var other in this.gridController.Grid)
+            {
+                if (other == null)
+                {
+                    continue;
+                }
+                if (ball.Bounds.IntersectsWith(other.Bounds))
+                {
+                    if (other.Broken)
+                    {
+                        continue;
+                    }
+                    if (other.Breakable)
+                    {
+                        this.Controls.Remove(other);
+                        other.Broken = true;
+                    }
+
+
+                    // Calculate
+                    var dist1 = 100;
+                    var dist2 = 100;
+                    var dist3 = 100;
+                    var dist4 = 100;
+
+                    var bounds = ball.Bounds;
+
+                    var rect1 = new Rectangle(bounds.X, bounds.Y, bounds.Width, 1);
+                    var rect2 = new Rectangle(bounds.X + bounds.Width, bounds.Y, 1, bounds.Height);
+                    var rect3 = new Rectangle(bounds.X, bounds.Y + bounds.Height, bounds.Width, 1);
+                    var rect4 = new Rectangle(bounds.X, bounds.Y, 1, bounds.Height);
+
+                    if (rect1.IntersectsWith(other.Bounds))
+                    {
+                        dist1 = other.Bounds.Y + other.Bounds.Height - bounds.Y;
+                    }
+
+                    if (rect2.IntersectsWith(other.Bounds))
+                    {
+                        dist2 = bounds.X + bounds.Width - other.Bounds.X;
+                    }
+
+                    if (rect3.IntersectsWith(other.Bounds))
+                    {
+                        dist3 = bounds.Y + bounds.Height - other.Bounds.Y;
+                    }
+
+                    if (rect4.IntersectsWith(other.Bounds))
+                    {
+                        dist4 = other.Bounds.X + other.Bounds.Width - bounds.X;
+                    }
+
+                    if (dist3 < dist2 && dist3 < dist1 && dist3 < dist4)
+                    {
+                        this.vecX *= -1;
+                    }
+
+                    if (dist2 < dist3 && dist2 < dist1 && dist2 < dist4)
+                    {
+                        this.vecY *= -1;
+                    }
+
+                    if (dist1 < dist3 && dist1 < dist2 && dist1 < dist4)
+                    {
+                        this.vecX *= -1;
+                    }
+
+                    if (dist4 < dist3 && dist4 < dist2 && dist4 < dist1)
+                    {
+                        this.vecY *= -1;
+                    }
+
+                    break;
+                }
             }
         }
     }

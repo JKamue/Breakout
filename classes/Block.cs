@@ -12,6 +12,7 @@ namespace Breakout.classes
     class Block : System.Windows.Forms.Label
     {
         public bool Breakable;
+        public bool Broken = false;
 
         public int SpeedAfterCollision;
 

@@ -21,7 +21,7 @@ namespace Breakout
         private int Rows;
         private int Cols;
 
-        private Block[,] Grid;
+        public Block[,] Grid { get; private set; }
 
         private Size BlockSize;
 
@@ -60,7 +60,6 @@ namespace Breakout
             this.Grid[coord.X, coord.Y] = block;
             this.Screen.Controls.Add(block);
         }
-
 
         public bool CoordinateInGrid(GridCoordinate coord)
         {
