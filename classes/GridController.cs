@@ -62,19 +62,35 @@ namespace Breakout
 
         public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision)
         {
-            this.AddBlock(coord, color, breakable, speedAfterCollision, 1, 1);
+            this.AddBlock(coord, color, breakable, speedAfterCollision, 1, 1, 0, 0);
         }
 
         public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision, int colspan,
-            int rowspan)
+            int rowspan, int margin, int marginType)
         {
             if (!CoordinateInGrid(coord))
             {
                 throw new CoordinatesOutOfBoundsException($"Coordinate {coord.X}/{coord.Y} is not in Grid {this.Cols - 1}/{this.Rows - 1}");
             }
 
-            var distanceTop = this.Top + coord.Y * this.BlockSize.Height;
-            var distanceLeft = this.Left + coord.X * this.BlockSize.Width;
+            var mHeight = 0;
+            var mWidth = 0;
+            switch (marginType)
+            {
+                case 1:
+                    mHeight = margin;
+                    mWidth = margin;
+                    break;
+                case 2:
+                    mHeight = margin;
+                    break;
+                case 3:
+                    mWidth = margin;
+                    break;
+            }
+
+            var distanceTop = this.Top + coord.Y * this.BlockSize.Height + mHeight;
+            var distanceLeft = this.Left + coord.X * this.BlockSize.Width + mWidth;
 
             if (this.Grid[coord.X, coord.Y] != null)
             {
@@ -82,8 +98,8 @@ namespace Breakout
             }
             
             var realBlockSize = new Size(
-                this.BlockSize.Width * colspan,
-                this.BlockSize.Height * rowspan);
+                this.BlockSize.Width * colspan - mWidth,
+                this.BlockSize.Height * rowspan - mHeight);
 
             var block = new Block(distanceTop, distanceLeft, realBlockSize, color, breakable, speedAfterCollision);
             this.Grid[coord.X, coord.Y] = block;

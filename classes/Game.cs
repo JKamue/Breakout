@@ -106,7 +106,9 @@ namespace Breakout.classes
                     block.breaks,
                     block.speed,
                     block.colspan,
-                    block.rowspan);
+                    block.rowspan,
+                    block.margin,
+                    block.mType);
             }
         }
 

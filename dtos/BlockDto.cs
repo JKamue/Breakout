@@ -16,8 +16,10 @@ namespace Breakout.dtos
         public int speed;
         public int colspan;
         public int rowspan;
+        public int margin;
+        public int mType;
 
-        public BlockDto(int x, int y, Color color, bool breaks, int speed, int colspan, int rowspan)
+        public BlockDto(int x, int y, Color color, bool breaks, int speed, int colspan, int rowspan, int margin, int mType)
         {
             this.x = x;
             this.y = y;
@@ -26,6 +28,8 @@ namespace Breakout.dtos
             this.speed = speed;
             this.colspan = colspan;
             this.rowspan = rowspan;
+            this.margin = margin;
+            this.mType = mType;
         }
     }
 }
