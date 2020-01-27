@@ -72,7 +72,7 @@ namespace Breakout.classes
                 MessageBox.Show($"Sie haben gewonnen! Sie haven {min} Minuten {sec} Sekunden gespielt!",
                     "Herzlichen Glückwunsch!");
             }
-            else
+            else if(Player.Misses == Lives)
             {
                 MessageBox.Show($"Sie haben verloren!",
                     "Nächstes Mal vielleicht!");
