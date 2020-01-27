@@ -32,16 +32,16 @@ namespace Breakout.classes
             Form.KeyDown += new KeyEventHandler(this.KeyPressed);
             Form.KeyUp += new KeyEventHandler(this.KeyReleased);
             Form.Controls.Add(this);
-
-            Form.MouseMove += new MouseEventHandler(this.SyncWithMouse);
-
+            
             this.MaxLeft = maxLeft;
             this.MaxRight = maxRight;
 
             PlayerUpdateTimer = new Timer();
             PlayerUpdateTimer.Interval = 10;
             PlayerUpdateTimer.Tick += new EventHandler(SyncWithKeys);
+            PlayerUpdateTimer.Tick += new EventHandler(SyncWithMouse);
             PlayerUpdateTimer.Start();
+            Cursor.Hide();
         }
 
         public void EndGame()
@@ -51,11 +51,13 @@ namespace Breakout.classes
             PlayerUpdateTimer.Stop();
         }
 
-        public void SyncWithMouse(object sender, MouseEventArgs e)
+        public void SyncWithMouse(object sender, EventArgs e)
         {
-            if (e.X < MaxRight && e.X > MaxLeft)
+            var relativeCursorPos = Form.PointToClient(Cursor.Position);
+            var realPos = (int) Math.Round(relativeCursorPos.X - Width * 0.5);
+            if (realPos < MaxRight && realPos > MaxLeft)
             {
-                Left = e.X;
+                Left = realPos;
             }
         }
 
