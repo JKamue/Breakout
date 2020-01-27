@@ -12,12 +12,17 @@ namespace Breakout.classes
 {
     class Player: Block
     {
-        private int maxLeft;
-        private int maxRight;
+        private int MaxLeft;
+        private int MaxRight;
 
         public int Misses;
 
         private Form Form;
+
+        private bool KeyLeftPressed = false;
+        private bool KeyRightPressed = false;
+
+        private Timer PlayerUpdateTimer;
 
         public Player(Form form, int maxLeft, int maxRight, int distanceTop, int distanceLeft,
             Size size, Color color, bool breakable, int speedAfterCollision)
@@ -25,51 +30,71 @@ namespace Breakout.classes
         {
             Form = form;
             Form.KeyDown += new KeyEventHandler(this.KeyPressed);
+            Form.KeyUp += new KeyEventHandler(this.KeyReleased);
             Form.Controls.Add(this);
 
             Form.MouseMove += new MouseEventHandler(this.SyncWithMouse);
 
-            this.maxLeft = maxLeft;
-            this.maxRight = maxRight;
+            this.MaxLeft = maxLeft;
+            this.MaxRight = maxRight;
+
+            PlayerUpdateTimer = new Timer();
+            PlayerUpdateTimer.Interval = 10;
+            PlayerUpdateTimer.Tick += new EventHandler(SyncWithKeys);
+            PlayerUpdateTimer.Start();
         }
 
         public void EndGame()
         {
-            Form.MouseMove -= new MouseEventHandler(this.SyncWithMouse);
             Form.KeyDown -= new KeyEventHandler(this.KeyPressed);
+            Form.KeyUp -= new KeyEventHandler(this.KeyReleased);
+            PlayerUpdateTimer.Stop();
         }
 
         public void SyncWithMouse(object sender, MouseEventArgs e)
         {
-            if (e.X < maxRight && e.X > maxLeft)
+            if (e.X < MaxRight && e.X > MaxLeft)
             {
                 Left = e.X;
             }
         }
 
-        public void KeyPressed(object sender, KeyEventArgs e)
+        public void SyncWithKeys(object sender, EventArgs e)
         {
-            if (e.KeyData == Keys.Left)
+            if (KeyRightPressed && !KeyLeftPressed)
             {
-                if (Left - 50 > maxLeft)
-                {
-                    Left -= 50;
-                }
-                else
-                {
-                    Left = maxLeft;
-                }
-            } else if (e.KeyData == Keys.Right)
+                Left += Left < MaxRight ? 12 : 0;
+            }
+            else if (KeyLeftPressed && !KeyRightPressed)
             {
-                if (Left + 50 < maxRight)
-                {
-                    Left += 50;
-                }
-                else
-                {
-                    Left = maxRight;
-                }
+                Left -= Left > MaxLeft ? 12 : 0;
             }
         }
+
+        public void KeyPressed(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                KeyLeftPressed = true;
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                KeyRightPressed = true;
+            }
+        }
+
+        public void KeyReleased(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                KeyLeftPressed = false;
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                KeyRightPressed = false;
+            }
+        }
+
+
     }
 }
