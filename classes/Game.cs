@@ -86,8 +86,8 @@ namespace Breakout.classes
             }
 
             GridController.SelfDestruct();
-
-            Form.StartGame();
+            Form.Close();
+            Form.BackToMainMenu();
         }
 
         private void GenerateField(GridDto grid)

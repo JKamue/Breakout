@@ -39,7 +39,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Screen";
             this.Text = "JKamue Breakout";
-            this.Load += new System.EventHandler(this.Screen_Load);
             this.ResumeLayout(false);
 
         }

@@ -41,7 +41,6 @@ namespace Breakout.classes
             PlayerUpdateTimer.Tick += new EventHandler(SyncWithKeys);
             PlayerUpdateTimer.Tick += new EventHandler(SyncWithMouse);
             PlayerUpdateTimer.Start();
-            Cursor.Hide();
         }
 
         public void EndGame()

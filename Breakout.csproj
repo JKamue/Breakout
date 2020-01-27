@@ -58,6 +58,7 @@
     <Compile Include="classes\Game.cs" />
     <Compile Include="classes\GridCoordinate.cs" />
     <Compile Include="classes\GridController.cs" />
+    <Compile Include="classes\LevelManager.cs" />
     <Compile Include="classes\Player.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -66,6 +67,12 @@
     <Compile Include="dtos\GridDto.cs" />
     <Compile Include="dtos\PlayerDto.cs" />
     <Compile Include="exceptions\CoordinatesOutOfBoundsException.cs" />
+    <Compile Include="LevelSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LevelSelection.Designer.cs">
+      <DependentUpon>LevelSelection.cs</DependentUpon>
+    </Compile>
     <Compile Include="Screen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +81,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="LevelSelection.resx">
+      <DependentUpon>LevelSelection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Screen.resx">
       <DependentUpon>Screen.cs</DependentUpon>
     </EmbeddedResource>
