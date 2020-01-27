@@ -16,6 +16,7 @@ namespace Breakout
     public partial class Screen : Form
     {
         private readonly Form MainMenu;
+        private Game Game;
         public Screen(Form mainMenu, string levelSettings)
         {
             InitializeComponent();
@@ -24,14 +25,17 @@ namespace Breakout
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.MainMenu = mainMenu;
-            this.Closed += new EventHandler(OnRageQuit);
+            this.FormClosed += new FormClosedEventHandler(OnRageQuit);
             StartGame(levelSettings);
         }
 
-        private void OnRageQuit(object sender, EventArgs e)
+        private void OnRageQuit(object sender, FormClosedEventArgs e)
         {
-            
-            BackToMainMenu();
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                Game.StopGame();
+                BackToMainMenu();
+            }
         }
 
         public void BackToMainMenu()
@@ -43,7 +47,7 @@ namespace Breakout
         public void StartGame(string levelSettings)
         {
             Cursor.Hide();
-            new Game(levelSettings, this);
+            Game = new Game(levelSettings, this);
         }
     }
 }

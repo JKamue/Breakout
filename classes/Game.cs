@@ -50,11 +50,11 @@ namespace Breakout.classes
         {
             if (GridController.GameOver() || Player.Misses == Lives)
             {
-                StopGame();
+                Form.Close();
             }
         }
 
-        private void StopGame()
+        public void StopGame()
         {
             GameTimer.Stop();
             foreach (var ball in Balls)
@@ -86,7 +86,6 @@ namespace Breakout.classes
             }
 
             GridController.SelfDestruct();
-            Form.Close();
             Form.BackToMainMenu();
         }
 
