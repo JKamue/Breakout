@@ -4,18 +4,24 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Breakout.classes
 {
     class Ball : Block
     {
         private int Velocity;
+        private int InitialVelocity;
         private double VecX;
         private double VecY;
         private int DirX;
         private int DirY;
+
+        private double RealPositionX;
+        private double RealPositionY;
 
         private int SpawnX;
         private int SpawnY;
@@ -26,12 +32,15 @@ namespace Breakout.classes
 
         private Player Player;
 
+        private bool Running;
+
         public Ball(Form form, GridController grid, Player player, int startVelocity, double vecX, double vecY, int dirX, int dirY,
             int distanceTop, int distanceLeft,
             Size size, Color color, bool breakable, int speedAfterCollision)
             : base(distanceTop, distanceLeft, size, color, breakable, speedAfterCollision)
         {
             this.Velocity = startVelocity;
+            this.InitialVelocity = startVelocity;
             this.VecX = vecX;
             this.VecY = vecY;
             this.DirX = dirX;
@@ -40,12 +49,16 @@ namespace Breakout.classes
             this.SpawnY = distanceTop;
             this.SpawnX = distanceLeft;
 
+            this.RealPositionY = Top;
+            this.RealPositionX = Left;
+
             this.Form = form;
             this.GridController = grid;
             this.Player = player;
 
             createTimer();
             Form.Controls.Add(this);
+            Start();
         }
 
         private void createTimer()
@@ -55,12 +68,42 @@ namespace Breakout.classes
             Clock.Tick += new System.EventHandler(this.DetectCollisions);
             Clock.Tick += new System.EventHandler(this.UpdatePosition);
             Clock.Interval = 10;
-            Clock.Enabled = true;
         }
 
-        public void Stop()
+        public void restartIn(int miliseconds)
+        {
+            var startGameTimer = new Timer();
+            startGameTimer.Tick += (s, e) =>
+            {
+                ((Timer)s).Stop();
+                if (Running)
+                {
+                    Start();
+                }
+            };
+            startGameTimer.Interval = miliseconds;
+            startGameTimer.Enabled = true;
+        }
+
+        private void Start()
+        {
+            if (Clock == null)
+            {
+                createTimer();
+            }
+            Clock.Start();
+            this.Running = true;
+        }
+
+        private void Stop()
         {
             Clock.Stop();
+        }
+
+        public void StopGame()
+        {
+            Stop();
+            Running = false;
         }
 
         private void CheckIfBallLeavingScreen(object sender, EventArgs e)
@@ -71,6 +114,11 @@ namespace Breakout.classes
                 Player.Misses++;
                 Top = SpawnY;
                 Left = SpawnX;
+                RealPositionY = Top;
+                RealPositionX = Left;
+                Velocity = InitialVelocity;
+                Stop();
+                restartIn(1000);
             }
 
             if (Left + Width + 10 > this.Form.Width)
@@ -91,8 +139,10 @@ namespace Breakout.classes
 
         private void UpdatePosition(object sender, EventArgs e)
         {
-            Top += (int)Math.Round(VecY * (Velocity + 2) * DirY);
-            Left += (int) Math.Round(VecX * (Velocity + 2) * DirX);
+            RealPositionY += VecY * (Velocity + 2) * DirY;
+            RealPositionX += VecX * (Velocity + 2) * DirX;
+            Top = (int)Math.Round(RealPositionY);
+            Left = (int) Math.Round(RealPositionX);
         }
 
         private bool CheckObjectForCollision(Block other)

@@ -59,7 +59,7 @@ namespace Breakout.classes
             GameTimer.Stop();
             foreach (var ball in Balls)
             {
-                ball.Stop();
+                ball.StopGame();
             }
             Player.EndGame();
             Stopwatch.Stop();
