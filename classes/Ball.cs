@@ -156,11 +156,16 @@ namespace Breakout.classes
                 }
                 if (other.Breakable)
                 {
+                    new Thread(() => Console.Beep(300, 150)).Start();
                     GridController.BreakBlock(other);
                     if (this.Velocity < other.SpeedAfterCollision)
                     {
                         this.Velocity = other.SpeedAfterCollision;
                     }
+                }
+                else
+                {
+                    new Thread(() => Console.Beep(1200, 150)).Start();
                 }
 
                 int dist1, dist2, dist3, dist4;
@@ -223,6 +228,7 @@ namespace Breakout.classes
 
             if (this.Bounds.IntersectsWith(Player.Bounds))
             {
+                new Thread(() => Console.Beep(600, 150)).Start();
                 // Check if ball hit side
                 if (Top + Height > Player.Top + 8)
                 {
