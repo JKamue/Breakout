@@ -58,6 +58,14 @@ namespace Breakout.classes
             {
                 Left = realPos;
             }
+            else if (realPos > MaxRight)
+            {
+                Left = MaxRight;
+            }
+            else if (realPos < MaxLeft)
+            {
+                Left = MaxLeft;
+            }
         }
 
         public void SyncWithKeys(object sender, EventArgs e)

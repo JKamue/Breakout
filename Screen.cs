@@ -30,6 +30,7 @@ namespace Breakout
 
         private void OnRageQuit(object sender, EventArgs e)
         {
+            
             BackToMainMenu();
         }
 
