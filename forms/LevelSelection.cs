@@ -23,13 +23,18 @@ namespace Breakout
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.Click += new EventHandler(DoubleClick);
         }
 
         private void LevelSelectedClick(object sender, EventArgs e)
         {
+            PlayGame((int) ((Button) sender).Tag);
+        }
+
+        private void PlayGame(int number)
+        {
             Hide();
-            var level = (int) ((Button) sender).Tag;
-            var gameScreen = new Screen(this, LevelManager.Levels[level]);
+            var gameScreen = new Screen(this, LevelManager.Levels[number]);
             gameScreen.ShowDialog();
             gameScreen.Dispose();
         }
@@ -39,9 +44,9 @@ namespace Breakout
             var levelAmount = LevelManager.Levels.Count;
             var x = 340;
             var width = 45;
-            for (var levelNumber = 0; levelNumber < levelAmount; levelNumber++)
+            for (var levelNumber = 1; levelNumber < levelAmount; levelNumber++)
             {
-                AddLevelSelectButton(x, 95, width, width, $"{levelNumber+1}", levelNumber);
+                AddLevelSelectButton(x, 95, width, width, levelNumber.ToString(), levelNumber);
                 x += width + 8;
             }
         }
@@ -59,6 +64,15 @@ namespace Breakout
             button.Click += new EventHandler(LevelSelectedClick);
             button.BackColor = Color.Black;
             this.Controls.Add(button);
+        }
+
+        private void DoubleClick(object sender, EventArgs e)
+        {
+            var relativePoint = this.PointToClient(Cursor.Position);
+            if (relativePoint.X > 160 && relativePoint.Y > 190 && relativePoint.X < 190 && relativePoint.Y < 215)
+            {
+                PlayGame(0);
+            }
         }
     }
 }
