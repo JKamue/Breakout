@@ -18,20 +18,47 @@ namespace Breakout
         public LevelSelection()
         {
             InitializeComponent();
+            AddButtonForEachLevel();
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        private void LevelSelectedClick(object sender, EventArgs e)
         {
             Hide();
-            Screen gameScreen = new Screen(this, LevelManager.Levels.First());
+            var level = (int) ((Button) sender).Tag;
+            var gameScreen = new Screen(this, LevelManager.Levels[level]);
             gameScreen.ShowDialog();
+            gameScreen.Dispose();
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void AddButtonForEachLevel()
         {
-            Hide();
-            Screen gameScreen = new Screen(this, LevelManager.Levels[1]);
-            gameScreen.ShowDialog();
+            var levelAmount = LevelManager.Levels.Count;
+            var x = 340;
+            var width = 45;
+            for (var levelNumber = 0; levelNumber < levelAmount; levelNumber++)
+            {
+                AddLevelSelectButton(x, 95, width, width, $"{levelNumber+1}", levelNumber);
+                x += width + 8;
+            }
+        }
+
+        private void AddLevelSelectButton(int x, int y, int width, int height, string text, int tag)
+        {
+            var button = new Button();
+            button.Text = text;
+            button.ForeColor = Color.White;
+            button.Font = new Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            button.Top = y;
+            button.Left = x;
+            button.Size = new Size(width, height);
+            button.Tag = tag;
+            button.Click += new EventHandler(LevelSelectedClick);
+            button.BackColor = Color.Black;
+            this.Controls.Add(button);
         }
     }
 }
