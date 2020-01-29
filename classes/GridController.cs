@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Breakout.classes;
+using Breakout.events;
 
 namespace Breakout
 {
@@ -30,6 +31,8 @@ namespace Breakout
         public Block[,] Grid { get; private set; }
 
         private Size BlockSize;
+
+        public event AllBlocksDestroyedEventHandler OnAllBlocksDestroyed;
 
         public GridController(Form screen, int width, int height, int top, int left, int rows, int cols)
         {
@@ -58,11 +61,6 @@ namespace Breakout
                 }
                 Screen.Controls.Remove(block);
             }
-        }
-
-        public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision)
-        {
-            this.AddBlock(coord, color, breakable, speedAfterCollision, 1, 1, 0, 0);
         }
 
         public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision, int colspan,
@@ -116,6 +114,11 @@ namespace Breakout
             Screen.Controls.Remove(block);
             block.Broken = true;
             BrokenBlocks++;
+
+            if (BrokenBlocks == BreakableBlocks)
+            {
+                OnAllBlocksDestroyed?.Invoke(this, new AllBlocksDestroyedEventArgs());
+            }
         }
 
         public bool CoordinateInGrid(GridCoordinate coord)

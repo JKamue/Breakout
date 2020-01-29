@@ -36,10 +36,24 @@ namespace Breakout.classes
             GeneratePlayer(grid.player);
             GenerateBalls(grid.balls);
 
+            GridController.OnAllBlocksDestroyed += new AllBlocksDestroyedEventHandler(AllBlocksDestroyed);
+
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
 
             Lives = grid.lives;
+        }
+
+        private void AllBlocksDestroyed(object sender, AllBlocksDestroyedEventArgs e)
+        {
+            Stopwatch.Stop();
+
+            var sec = Stopwatch.Elapsed.Seconds;
+            var min = Stopwatch.Elapsed.Minutes;
+
+            StopGame();
+            MessageBox.Show($"You won after only {min} minutes and {sec} seconds!",
+                    "Congrats!");
         }
 
         private void PlayerMissedBall(object sender, PlayerMissedEventArgs e)
@@ -51,7 +65,8 @@ namespace Breakout.classes
             }
             else
             {
-                Form.Close();
+                StopGame();
+                MessageBox.Show("You did not manage to win this Level! Maybe next time...", "You Lost!");
             }
         }
 
@@ -66,11 +81,6 @@ namespace Breakout.classes
                 {
                     ((Ball)sender).Velocity = block.SpeedAfterCollision;
                 }
-
-                if (GridController.GameOver())
-                {
-                    Form.Close();
-                }
             }
             else
             {
@@ -80,26 +90,16 @@ namespace Breakout.classes
 
         public void StopGame()
         {
+            Player.EndGame();
             foreach (var ball in Balls)
             {
                 ball.StopGame();
             }
-            Player.EndGame();
-            Stopwatch.Stop();
+            Form.Close();
+        }
 
-            var sec = Stopwatch.Elapsed.Seconds;
-            var min = Stopwatch.Elapsed.Minutes;
-
-            if (GridController.GameOver())
-            {
-                MessageBox.Show($"Sie haben gewonnen! Sie haven {min} Minuten {sec} Sekunden gespielt!",
-                    "Herzlichen Glückwunsch!");
-            }
-            else if(GameOver)
-            {
-                MessageBox.Show($"Sie haben verloren!",
-                    "Nächstes Mal vielleicht!");
-            }
+        public void EndGame()
+        {
 
             Form.Controls.Remove(Player);
 
