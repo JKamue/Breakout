@@ -7,13 +7,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Breakout.events;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Breakout.classes
 {
     class Ball : Block
     {
-        private int Velocity;
+        public int Velocity;
         private int InitialVelocity;
         private double VecX;
         private double VecY;
@@ -31,6 +32,8 @@ namespace Breakout.classes
         private Timer Clock;
 
         private Player Player;
+
+        public event BlockHitEventHandler OnBlockHit;
 
         private bool Running;
 
@@ -154,19 +157,8 @@ namespace Breakout.classes
                 {
                     return false;
                 }
-                if (other.Breakable)
-                {
-                    new Thread(() => Console.Beep(300, 150)).Start();
-                    GridController.BreakBlock(other);
-                    if (this.Velocity < other.SpeedAfterCollision)
-                    {
-                        this.Velocity = other.SpeedAfterCollision;
-                    }
-                }
-                else
-                {
-                    new Thread(() => Console.Beep(1200, 150)).Start();
-                }
+
+                OnBlockHit?.Invoke(this, new BlockHitEventArgs(other));
 
                 int dist1, dist2, dist3, dist4;
                 dist1 = dist2 = dist3 = dist4 = 100;

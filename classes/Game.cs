@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.Remoting.Channels;
+using System.Threading;
 using System.Windows.Forms;
 using Breakout.dtos;
+using Breakout.events;
 using Newtonsoft.Json;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Breakout.classes
 {
@@ -44,6 +47,24 @@ namespace Breakout.classes
             GameTimer.Interval = 100;
             GameTimer.Tick += new System.EventHandler(CheckIfGameOver);
             GameTimer.Start();
+        }
+
+        private void BallHitBlock(object sender, BlockHitEventArgs e)
+        {
+            var block = e.hitBlock;
+            if (block.Breakable)
+            {
+                new Thread(() => Console.Beep(300, 150)).Start();
+                GridController.BreakBlock(block);
+                if (((Ball)sender).Velocity < block.SpeedAfterCollision)
+                {
+                    ((Ball)sender).Velocity = block.SpeedAfterCollision;
+                }
+            }
+            else
+            {
+                new Thread(() => Console.Beep(1200, 150)).Start();
+            }
         }
 
         private void CheckIfGameOver(object sender, EventArgs e)
@@ -128,6 +149,8 @@ namespace Breakout.classes
                 var ball = new Ball(Form, GridController, Player, ballDto.startVelocity, 0.7, 0.7, -1, -1,
                     distanceTop, distanceLeft, new Size(ballDto.size, ballDto.size), ballDto.color, false, 1);
                 Balls.Add(ball);
+
+                ball.OnBlockHit += new BlockHitEventHandler(BallHitBlock);
             }
         }
     }

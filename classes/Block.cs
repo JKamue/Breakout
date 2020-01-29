@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace Breakout.classes
 {
 
-    class Block : System.Windows.Forms.Label
+    public class Block : System.Windows.Forms.Label
     {
         public bool Breakable;
         public bool Broken = false;

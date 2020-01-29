@@ -66,6 +66,7 @@
     <Compile Include="dtos\BlockDto.cs" />
     <Compile Include="dtos\GridDto.cs" />
     <Compile Include="dtos\PlayerDto.cs" />
+    <Compile Include="events\BlockHitEvent.cs" />
     <Compile Include="exceptions\CoordinatesOutOfBoundsException.cs" />
     <Compile Include="forms\LevelSelection.cs">
       <SubType>Form</SubType>
@@ -114,5 +115,6 @@
   <ItemGroup>
     <None Include="Resources\Background.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
