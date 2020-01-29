@@ -15,8 +15,6 @@ namespace Breakout.classes
         private int MaxLeft;
         private int MaxRight;
 
-        public int Misses;
-
         private Form Form;
 
         private bool KeyLeftPressed = false;

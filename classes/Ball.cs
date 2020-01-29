@@ -34,6 +34,7 @@ namespace Breakout.classes
         private Player Player;
 
         public event BlockHitEventHandler OnBlockHit;
+        public event PlayerMissedEventHandler OnPlayerMissed;
 
         private bool Running;
 
@@ -73,7 +74,7 @@ namespace Breakout.classes
             Clock.Interval = 10;
         }
 
-        public void restartIn(int miliseconds)
+        public void RestartIn(int milliseconds)
         {
             var startGameTimer = new Timer();
             startGameTimer.Tick += (s, e) =>
@@ -84,7 +85,7 @@ namespace Breakout.classes
                     Start();
                 }
             };
-            startGameTimer.Interval = miliseconds;
+            startGameTimer.Interval = milliseconds;
             startGameTimer.Enabled = true;
         }
 
@@ -113,15 +114,14 @@ namespace Breakout.classes
         {
             if (Top + Height + 30 > this.Form.Height)
             {
+                OnPlayerMissed?.Invoke(this, new PlayerMissedEventArgs());
                 DirY = -1;
-                Player.Misses++;
                 Top = SpawnY;
                 Left = SpawnX;
                 RealPositionY = Top;
                 RealPositionX = Left;
                 Velocity = InitialVelocity;
                 Stop();
-                restartIn(1000);
             }
 
             if (Left + Width + 10 > this.Form.Width)

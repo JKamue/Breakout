@@ -23,6 +23,9 @@ namespace Breakout.classes
         private Stopwatch Stopwatch;
 
         private int Lives;
+        private int LivesLost = 0;
+
+        private bool GameOver => Lives == LivesLost;
 
         public Game(string gameSettings, Screen form)
         {
@@ -39,6 +42,19 @@ namespace Breakout.classes
             Lives = grid.lives;
         }
 
+        private void PlayerMissedBall(object sender, PlayerMissedEventArgs e)
+        {
+            LivesLost += 1;
+            if (!GameOver)
+            {
+                ((Ball) sender).RestartIn(1000);
+            }
+            else
+            {
+                Form.Close();
+            }
+        }
+
         private void BallHitBlock(object sender, BlockHitEventArgs e)
         {
             var block = e.hitBlock;
@@ -51,19 +67,14 @@ namespace Breakout.classes
                     ((Ball)sender).Velocity = block.SpeedAfterCollision;
                 }
 
-                CheckIfGameOver();
+                if (GridController.GameOver())
+                {
+                    Form.Close();
+                }
             }
             else
             {
                 new Thread(() => Console.Beep(1200, 150)).Start();
-            }
-        }
-
-        private void CheckIfGameOver()
-        {
-            if (GridController.GameOver() || Player.Misses == Lives)
-            {
-                Form.Close();
             }
         }
 
@@ -84,7 +95,7 @@ namespace Breakout.classes
                 MessageBox.Show($"Sie haben gewonnen! Sie haven {min} Minuten {sec} Sekunden gespielt!",
                     "Herzlichen Glückwunsch!");
             }
-            else if(Player.Misses == Lives)
+            else if(GameOver)
             {
                 MessageBox.Show($"Sie haben verloren!",
                     "Nächstes Mal vielleicht!");
@@ -142,6 +153,7 @@ namespace Breakout.classes
                 Balls.Add(ball);
 
                 ball.OnBlockHit += new BlockHitEventHandler(BallHitBlock);
+                ball.OnPlayerMissed += new PlayerMissedEventHandler(PlayerMissedBall);
             }
         }
     }

@@ -67,6 +67,7 @@
     <Compile Include="dtos\GridDto.cs" />
     <Compile Include="dtos\PlayerDto.cs" />
     <Compile Include="events\BlockHitEvent.cs" />
+    <Compile Include="events\PlayerMissedEvent.cs" />
     <Compile Include="exceptions\CoordinatesOutOfBoundsException.cs" />
     <Compile Include="forms\LevelSelection.cs">
       <SubType>Form</SubType>
