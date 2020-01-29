@@ -20,7 +20,6 @@ namespace Breakout.classes
         private Player Player;
         private List<Ball> Balls = new List<Ball>();
 
-        private Timer GameTimer;
         private Stopwatch Stopwatch;
 
         private int Lives;
@@ -34,19 +33,10 @@ namespace Breakout.classes
             GeneratePlayer(grid.player);
             GenerateBalls(grid.balls);
 
-            StartGameTimer();
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
 
             Lives = grid.lives;
-        }
-
-        private void StartGameTimer()
-        {
-            GameTimer = new Timer();
-            GameTimer.Interval = 100;
-            GameTimer.Tick += new System.EventHandler(CheckIfGameOver);
-            GameTimer.Start();
         }
 
         private void BallHitBlock(object sender, BlockHitEventArgs e)
@@ -60,6 +50,8 @@ namespace Breakout.classes
                 {
                     ((Ball)sender).Velocity = block.SpeedAfterCollision;
                 }
+
+                CheckIfGameOver();
             }
             else
             {
@@ -67,7 +59,7 @@ namespace Breakout.classes
             }
         }
 
-        private void CheckIfGameOver(object sender, EventArgs e)
+        private void CheckIfGameOver()
         {
             if (GridController.GameOver() || Player.Misses == Lives)
             {
@@ -77,7 +69,6 @@ namespace Breakout.classes
 
         public void StopGame()
         {
-            GameTimer.Stop();
             foreach (var ball in Balls)
             {
                 ball.StopGame();
