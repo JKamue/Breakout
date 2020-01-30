@@ -98,20 +98,6 @@ namespace Breakout.classes
             Form.Close();
         }
 
-        public void EndGame()
-        {
-
-            Form.Controls.Remove(Player);
-
-            foreach (var ball in Balls)
-            {
-                Form.Controls.Remove(ball);
-            }
-
-            GridController.SelfDestruct();
-            Form.BackToMainMenu();
-        }
-
         private void GenerateField(GridDto grid)
         {
             Form.BackColor = grid.backColor;
@@ -136,7 +122,7 @@ namespace Breakout.classes
 
         private void GeneratePlayer(PlayerDto playerDto)
         {
-            Player = new Player(Form, playerDto.maxLeft, playerDto.maxRight, playerDto.distanceTop, playerDto.distanceLeft, new Size(playerDto.width, playerDto.height), playerDto.color,
+            Player = new Player(Form, playerDto.maxLeft, playerDto.maxRight, playerDto.mouse, playerDto.keyLeft, playerDto.keyRight, playerDto.distanceTop, playerDto.distanceLeft, new Size(playerDto.width, playerDto.height), playerDto.color,
                 false, 10);
         }
 

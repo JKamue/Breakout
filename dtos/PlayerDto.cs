@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Breakout.dtos
 {
@@ -16,8 +17,11 @@ namespace Breakout.dtos
         public int width;
         public int height;
         public Color color;
+        public bool mouse;
+        public Keys keyLeft;
+        public Keys keyRight;
 
-        public PlayerDto(int maxLeft, int maxRight, int distanceTop, int distanceLeft, int width, int height, Color color)
+        public PlayerDto(int maxLeft, int maxRight, int distanceTop, int distanceLeft, int width, int height, Color color, bool mouse, Keys keyLeft, Keys keyRight)
         {
             this.maxLeft = maxLeft;
             this.maxRight = maxRight;
@@ -26,6 +30,9 @@ namespace Breakout.dtos
             this.width = width;
             this.height = height;
             this.color = color;
+            this.mouse = mouse;
+            this.keyLeft = keyLeft;
+            this.keyRight = keyRight;
         }
     }
 }

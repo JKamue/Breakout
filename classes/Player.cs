@@ -20,15 +20,16 @@ namespace Breakout.classes
         private bool KeyLeftPressed = false;
         private bool KeyRightPressed = false;
 
+        private Keys KeyLeft;
+        private Keys KeyRight;
+
         private Timer PlayerUpdateTimer;
 
-        public Player(Form form, int maxLeft, int maxRight, int distanceTop, int distanceLeft,
+        public Player(Form form, int maxLeft, int maxRight, bool mouse, Keys keyLeft, Keys keyRight, int distanceTop, int distanceLeft,
             Size size, Color color, bool breakable, int speedAfterCollision)
             : base(distanceTop, distanceLeft, size, color, breakable, speedAfterCollision)
         {
             Form = form;
-            Form.KeyDown += new KeyEventHandler(this.KeyPressed);
-            Form.KeyUp += new KeyEventHandler(this.KeyReleased);
             Form.Controls.Add(this);
             
             this.MaxLeft = maxLeft;
@@ -36,8 +37,22 @@ namespace Breakout.classes
 
             PlayerUpdateTimer = new Timer();
             PlayerUpdateTimer.Interval = 10;
-            PlayerUpdateTimer.Tick += new EventHandler(SyncWithKeys);
-            PlayerUpdateTimer.Tick += new EventHandler(SyncWithMouse);
+
+            if (mouse)
+            {
+                PlayerUpdateTimer.Tick += new EventHandler(SyncWithMouse);
+            }
+            else
+            {
+                KeyLeft = keyLeft;
+                KeyRight = keyRight;
+
+                Form.KeyDown += new KeyEventHandler(this.KeyPressed);
+                Form.KeyUp += new KeyEventHandler(this.KeyReleased);
+
+                PlayerUpdateTimer.Tick += new EventHandler(SyncWithKeys);
+            }
+
             PlayerUpdateTimer.Start();
         }
 
@@ -80,11 +95,11 @@ namespace Breakout.classes
 
         public void KeyPressed(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Left)
+            if (e.KeyCode == KeyLeft)
             {
                 KeyLeftPressed = true;
             }
-            else if (e.KeyCode == Keys.Right)
+            else if (e.KeyCode == KeyRight)
             {
                 KeyRightPressed = true;
             }
@@ -92,11 +107,11 @@ namespace Breakout.classes
 
         public void KeyReleased(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Left)
+            if (e.KeyCode == KeyLeft)
             {
                 KeyLeftPressed = false;
             }
-            else if (e.KeyCode == Keys.Right)
+            else if (e.KeyCode == KeyRight)
             {
                 KeyRightPressed = false;
             }
