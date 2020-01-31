@@ -9,16 +9,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Breakout.classes;
+using Breakout.dtos;
+using Newtonsoft.Json;
 
 namespace Breakout
 {
     public partial class LevelSelection : Form
     {
+        private int singlePlayerDistLeft;
+        private int multiPlayerDistLeft;
+        private const int width = 45;
+
         private LevelManager LevelManager = new LevelManager();
         public LevelSelection()
         {
             InitializeComponent();
-            AddButtonForEachLevel();
+            AddAllButtons();
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -34,21 +40,39 @@ namespace Breakout
         private void PlayGame(int number)
         {
             Hide();
-            var gameScreen = new Screen(this, LevelManager.SingelPlayerLevels[number]);
+            var gameScreen = new Screen(this, LevelManager.Levels[number]);
             gameScreen.ShowDialog();
             gameScreen.Dispose();
         }
 
-        private void AddButtonForEachLevel()
+        private void AddAllButtons()
         {
-            var levelAmount = LevelManager.SingelPlayerLevels.Count;
-            var x = 340;
-            const int width = 45;
+            var levelAmount = LevelManager.Levels.Count;
+            singlePlayerDistLeft = multiPlayerDistLeft = 340;
             for (var levelNumber = 1; levelNumber < levelAmount; levelNumber++)
             {
-                AddLevelSelectButton(x, 95, width, width, levelNumber.ToString(), levelNumber);
-                x += width + 8;
+                var settings = JsonConvert.DeserializeObject<GridDto>(LevelManager.Levels[levelNumber]);
+                if (settings.players.Count == 1)
+                {
+                    AddSinglePlayerButton(levelNumber);
+                }
+                else
+                {
+                    AddMultiPlayerButton(levelNumber, settings.players.Count);
+                }
             }
+        }
+
+        private void AddSinglePlayerButton(int levelNumber)
+        {
+            AddLevelSelectButton(singlePlayerDistLeft, 95, width, width, levelNumber.ToString(), levelNumber);
+            singlePlayerDistLeft += width + 8;
+        }
+
+        private void AddMultiPlayerButton(int levelNumber, int playerCount)
+        {
+            AddLevelSelectButton(multiPlayerDistLeft, 200, 80, width, $"{playerCount}p", levelNumber);
+            multiPlayerDistLeft += 80 + 8;
         }
 
         private void AddLevelSelectButton(int x, int y, int width, int height, string text, int tag)
