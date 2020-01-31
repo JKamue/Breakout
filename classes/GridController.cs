@@ -25,9 +25,7 @@ namespace Breakout
 
         private int BreakableBlocks;
         private int BrokenBlocks;
-
-        public bool GameOver() => BrokenBlocks == BreakableBlocks;
-
+        
         public Block[,] Grid { get; private set; }
 
         private Size BlockSize;
@@ -49,18 +47,6 @@ namespace Breakout
             this.BlockSize = new Size(width / cols, height / rows);
 
             this.Grid = new Block[cols,rows];
-        }
-
-        public void SelfDestruct()
-        {
-            foreach (var block in Grid)
-            {
-                if (block == null)
-                {
-                    continue;
-                }
-                Screen.Controls.Remove(block);
-            }
         }
 
         public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision, int colspan,

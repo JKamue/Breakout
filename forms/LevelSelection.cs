@@ -34,16 +34,16 @@ namespace Breakout
         private void PlayGame(int number)
         {
             Hide();
-            var gameScreen = new Screen(this, LevelManager.Levels[number]);
+            var gameScreen = new Screen(this, LevelManager.SingelPlayerLevels[number]);
             gameScreen.ShowDialog();
             gameScreen.Dispose();
         }
 
         private void AddButtonForEachLevel()
         {
-            var levelAmount = LevelManager.Levels.Count;
+            var levelAmount = LevelManager.SingelPlayerLevels.Count;
             var x = 340;
-            var width = 45;
+            const int width = 45;
             for (var levelNumber = 1; levelNumber < levelAmount; levelNumber++)
             {
                 AddLevelSelectButton(x, 95, width, width, levelNumber.ToString(), levelNumber);
@@ -53,14 +53,16 @@ namespace Breakout
 
         private void AddLevelSelectButton(int x, int y, int width, int height, string text, int tag)
         {
-            var button = new Button();
-            button.Text = text;
-            button.ForeColor = Color.White;
-            button.Font = new Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            button.Top = y;
-            button.Left = x;
-            button.Size = new Size(width, height);
-            button.Tag = tag;
+            var button = new Button
+            {
+                Text = text,
+                ForeColor = Color.White,
+                Font = new Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0))),
+                Top = y,
+                Left = x,
+                Size = new Size(width, height),
+                Tag = tag
+            };
             button.Click += new EventHandler(LevelSelectedClick);
             button.BackColor = Color.Black;
             this.Controls.Add(button);
@@ -73,6 +75,6 @@ namespace Breakout
             {
                 PlayGame(0);
             }
-        }
+        } 
     }
 }

@@ -17,7 +17,7 @@ namespace Breakout.classes
         private GridController GridController;
         private Screen Form;
 
-        private Player Player;
+        private List<Player> Players;
         private List<Ball> Balls = new List<Ball>();
 
         private Stopwatch Stopwatch;
@@ -33,7 +33,7 @@ namespace Breakout.classes
 
             var grid = JsonConvert.DeserializeObject<GridDto>(gameSettings);
             GenerateField(grid);
-            GeneratePlayer(grid.player);
+            GeneratePlayers(grid.players);
             GenerateBalls(grid.balls);
 
             GridController.OnAllBlocksDestroyed += new AllBlocksDestroyedEventHandler(AllBlocksDestroyed);
@@ -90,7 +90,11 @@ namespace Breakout.classes
 
         public void StopGame()
         {
-            Player.EndGame();
+            foreach (var player in Players)
+            {
+                player.EndGame();
+            }
+
             foreach (var ball in Balls)
             {
                 ball.StopGame();
@@ -120,10 +124,15 @@ namespace Breakout.classes
             }
         }
 
-        private void GeneratePlayer(PlayerDto playerDto)
+        private void GeneratePlayers(List<PlayerDto> players)
         {
-            Player = new Player(Form, playerDto.maxLeft, playerDto.maxRight, playerDto.mouse, playerDto.keyLeft, playerDto.keyRight, playerDto.distanceTop, playerDto.distanceLeft, new Size(playerDto.width, playerDto.height), playerDto.color,
-                false, 10);
+            Players = new List<Player>();
+            foreach (var playerDto in players)
+            {
+                Players.Add(new Player(Form, playerDto.maxLeft, playerDto.maxRight, playerDto.mouse, playerDto.keyLeft, playerDto.keyRight, playerDto.distanceTop, playerDto.distanceLeft, new Size(playerDto.width, playerDto.height), playerDto.color,
+                    false, 10));
+            }
+            
         }
 
         private void GenerateBalls(List<BallDto> balls)
@@ -134,7 +143,7 @@ namespace Breakout.classes
                 var distanceTop = rand.Next(ballDto.spawnYmin, ballDto.spawnYmax);
                 var distanceLeft = rand.Next(ballDto.spawnXmin, ballDto.spawnXmax);
 
-                var ball = new Ball(Form, GridController, Player, ballDto.startVelocity, 0.7, 0.7, -1, -1,
+                var ball = new Ball(Form, GridController, Players, ballDto.startVelocity, 0.7, 0.7, -1, -1,
                     distanceTop, distanceLeft, new Size(ballDto.size, ballDto.size), ballDto.color, false, 1);
                 Balls.Add(ball);
 

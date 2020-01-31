@@ -31,14 +31,14 @@ namespace Breakout.classes
         private GridController GridController;
         private Timer Clock;
 
-        private Player Player;
+        private List<Player> Players;
 
         public event BlockHitEventHandler OnBlockHit;
         public event PlayerMissedEventHandler OnPlayerMissed;
 
         private bool Running;
 
-        public Ball(Form form, GridController grid, Player player, int startVelocity, double vecX, double vecY, int dirX, int dirY,
+        public Ball(Form form, GridController grid, List<Player> players, int startVelocity, double vecX, double vecY, int dirX, int dirY,
             int distanceTop, int distanceLeft,
             Size size, Color color, bool breakable, int speedAfterCollision)
             : base(distanceTop, distanceLeft, size, color, breakable, speedAfterCollision)
@@ -58,7 +58,7 @@ namespace Breakout.classes
 
             this.Form = form;
             this.GridController = grid;
-            this.Player = player;
+            this.Players = players;
 
             createTimer();
             Form.Controls.Add(this);
@@ -218,39 +218,42 @@ namespace Breakout.classes
                 }
             }
 
-            if (this.Bounds.IntersectsWith(Player.Bounds))
+            foreach (var player in Players)
             {
-                new Thread(() => Console.Beep(600, 150)).Start();
-                // Check if ball hit side
-                if (Top + Height > Player.Top + 8)
+                if (this.Bounds.IntersectsWith(player.Bounds))
                 {
-                    CheckObjectForCollision(Player);
-                    return;
+                    new Thread(() => Console.Beep(600, 150)).Start();
+                    // Check if ball hit side
+                    if (Top + Height > player.Top + 8)
+                    {
+                        CheckObjectForCollision(player);
+                        return;
+                    }
+
+                    var bleft = Left + 0.5 * Width;
+
+                    var leftDiff = bleft - player.Left;
+                    var point = Math.Round(leftDiff - 0.5 * player.Width);
+
+                    var direction = point / player.Width;
+                    //var forceX = 2 * Math.Abs(point / Player.Width); old equation with f(x) = 2|x|
+                    var forceX = 0.2 * point / player.Width + 0.6; // new equation = f(x) = 0.2 x^2 + 0.6
+                    var forceY = Math.Sqrt(1 - Math.Pow(forceX, 2));
+
+                    VecX = forceX;
+                    VecY = forceY;
+
+                    if (direction < 0)
+                    {
+                        this.DirX = -1;
+                    }
+                    else
+                    {
+                        this.DirX = 1;
+                    }
+
+                    this.DirY = -1;
                 }
-
-                var bleft = Left + 0.5 * Width;
-
-                var leftDiff = bleft - Player.Left;
-                var point = Math.Round(leftDiff - 0.5 * Player.Width);
-
-                var direction = point / Player.Width;
-                //var forceX = 2 * Math.Abs(point / Player.Width); old equation with f(x) = 2|x|
-                var forceX = 0.2 * point / Player.Width + 0.6; // new equation = f(x) = 0.2 x^2 + 0.6
-                var forceY = Math.Sqrt(1 - Math.Pow(forceX, 2));
-
-                VecX = forceX;
-                VecY = forceY;
-
-                if (direction < 0)
-                {
-                    this.DirX = -1;
-                }
-                else
-                {
-                    this.DirX = 1;
-                }
-
-                this.DirY = -1;
             }
         }
     }
