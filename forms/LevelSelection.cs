@@ -21,6 +21,8 @@ namespace Breakout
         private const int width = 45;
 
         private LevelManager LevelManager = new LevelManager();
+
+        private Screen GameScreen; 
         public LevelSelection()
         {
             InitializeComponent();
@@ -40,9 +42,10 @@ namespace Breakout
         private void PlayGame(int number)
         {
             Hide();
-            var gameScreen = new Screen(this, LevelManager.Levels[number]);
-            gameScreen.ShowDialog();
-            gameScreen.Dispose();
+            GameScreen = new Screen(this, LevelManager.Levels[number]);
+            GameScreen.ShowDialog();
+            GameScreen.Dispose();
+            GameScreen = null;
         }
 
         private void AddAllButtons()

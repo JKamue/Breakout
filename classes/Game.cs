@@ -33,6 +33,8 @@ namespace Breakout.classes
         private int LivesLost = 0;
         private int Score = 0;
 
+        private PrivateFontCollection FontCollection;
+
         private bool GameOver => Lives == LivesLost;
 
         public Game(string gameSettings, Screen form)
@@ -52,7 +54,7 @@ namespace Breakout.classes
 
             var timer = new Timer();
             timer.Tick += new EventHandler(UpdateTime);
-            timer.Interval = 1000;
+            timer.Interval = 900;
             timer.Start();
 
             Lives = grid.lives;
@@ -79,12 +81,11 @@ namespace Breakout.classes
 
         private void GenerateInfoLabels()
         {
-            var fonts = new PrivateFontCollection();
+            FontCollection = new PrivateFontCollection();
             var fontData = Properties.Resources.PixelMiners_KKal;
-            var fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
-            Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
-            fonts.AddMemoryFont(fontPtr, Properties.Resources.PixelMiners_KKal.Length);
-            Marshal.FreeCoTaskMem(fontPtr);
+            var frontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
+            Marshal.Copy(fontData, 0, frontPtr, fontData.Length);
+            FontCollection.AddMemoryFont(frontPtr, Properties.Resources.PixelMiners_KKal.Length);
 
             var borderGrey = (Color) (new ColorConverter()).ConvertFrom("#8e8e8e");
 
@@ -96,7 +97,7 @@ namespace Breakout.classes
                 Left = Form.Width - 80,
                 TextAlign = ContentAlignment.MiddleRight,
                 Text = Score.ToString(),
-                Font = new Font(fonts.Families[0], 20, FontStyle.Regular),
+                Font = new Font(FontCollection.Families[0], 20, FontStyle.Regular),
                 ForeColor = borderGrey
             };
 
@@ -107,18 +108,7 @@ namespace Breakout.classes
                 Width = Form.Width,
                 Left = 0,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font(fonts.Families[0], 20, FontStyle.Regular),
-                ForeColor = borderGrey
-            };
-
-            TimeLabel = new Label
-            {
-                Top = 0,
-                Height = 30,
-                Width = Form.Width,
-                Left = 0,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font(fonts.Families[0], 20, FontStyle.Regular),
+                Font = new Font(FontCollection.Families[0], 20, FontStyle.Regular),
                 ForeColor = borderGrey
             };
 
@@ -129,7 +119,7 @@ namespace Breakout.classes
                 Width = 400,
                 Height = 30,
                 TextAlign = ContentAlignment.MiddleLeft,
-                Font = new Font(fonts.Families[0], 20, FontStyle.Regular),
+                Font = new Font(FontCollection.Families[0], 20, FontStyle.Regular),
                 ForeColor = borderGrey
             };
 
@@ -143,12 +133,9 @@ namespace Breakout.classes
 
         private void AllBlocksDestroyed(object sender, AllBlocksDestroyedEventArgs e)
         {
-            Stopwatch.Stop();
-
+            StopGame();
             var sec = Stopwatch.Elapsed.Seconds;
             var min = Stopwatch.Elapsed.Minutes;
-
-            StopGame();
             MessageBox.Show($"You won after only {min} minutes and {sec} seconds!",
                     "Congrats!");
         }
@@ -157,7 +144,6 @@ namespace Breakout.classes
         {
             LivesLost += 1;
             UpdateLives();
-            Stopwatch.Stop();
 
             if (!GameOver)
             {
@@ -191,6 +177,7 @@ namespace Breakout.classes
 
         public void StopGame()
         {
+            Stopwatch.Stop();
             foreach (var player in Players)
             {
                 player.EndGame();
@@ -201,6 +188,8 @@ namespace Breakout.classes
                 ball.StopGame();
             }
             Form.Close();
+
+            FontCollection.Dispose();
         }
 
         private void GenerateField(GridDto grid)
