@@ -69,5 +69,15 @@ namespace Breakout.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        internal static byte[] PixelMiners_KKal {
+            get {
+                object obj = ResourceManager.GetObject("PixelMiners_KKal", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

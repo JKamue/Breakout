@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Text;
+using System.Net.Mime;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Channels;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,10 +23,15 @@ namespace Breakout.classes
         private List<Player> Players;
         private List<Ball> Balls = new List<Ball>();
 
+        private Label ScoreLabel;
+        private Label TimeLabel;
+        private Label LivesLabel;
+
         private Stopwatch Stopwatch;
 
         private int Lives;
         private int LivesLost = 0;
+        private int Score = 0;
 
         private bool GameOver => Lives == LivesLost;
 
@@ -31,18 +39,107 @@ namespace Breakout.classes
         {
             Form = form;
 
+            Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+
             var grid = JsonConvert.DeserializeObject<GridDto>(gameSettings);
             GenerateField(grid);
             GeneratePlayers(grid.players);
             GenerateBalls(grid.balls);
+            GenerateInfoLabels();
 
             GridController.OnAllBlocksDestroyed += new AllBlocksDestroyedEventHandler(AllBlocksDestroyed);
 
-            Stopwatch = new Stopwatch();
-            Stopwatch.Start();
+            var timer = new Timer();
+            timer.Tick += new EventHandler(UpdateTime);
+            timer.Interval = 1000;
+            timer.Start();
 
             Lives = grid.lives;
+            UpdateLives();
         }
+
+        private void UpdateScore(int add)
+        {
+            Score += add;
+            ScoreLabel.Text = Score.ToString();
+        }
+
+        private void UpdateTime(object source, EventArgs e)
+        {
+            var timespan = Stopwatch.Elapsed;
+            var time = timespan.ToString(@"mm\:ss");
+            TimeLabel.Text = time;
+        }
+
+        private void UpdateLives()
+        {
+            LivesLabel.Text = $@"Lives: {Lives - LivesLost}";
+        }
+
+        private void GenerateInfoLabels()
+        {
+            var fonts = new PrivateFontCollection();
+            var fontData = Properties.Resources.PixelMiners_KKal;
+            var fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
+            Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+            fonts.AddMemoryFont(fontPtr, Properties.Resources.PixelMiners_KKal.Length);
+            Marshal.FreeCoTaskMem(fontPtr);
+
+            var borderGrey = (Color) (new ColorConverter()).ConvertFrom("#8e8e8e");
+
+            ScoreLabel = new Label
+            {
+                Top = 0,
+                Height = 30,
+                Width = 70,
+                Left = Form.Width - 80,
+                TextAlign = ContentAlignment.MiddleRight,
+                Text = Score.ToString(),
+                Font = new Font(fonts.Families[0], 20, FontStyle.Regular),
+                ForeColor = borderGrey
+            };
+
+            TimeLabel = new Label
+            {
+                Top = 0,
+                Height = 30,
+                Width = Form.Width,
+                Left = 0,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font(fonts.Families[0], 20, FontStyle.Regular),
+                ForeColor = borderGrey
+            };
+
+            TimeLabel = new Label
+            {
+                Top = 0,
+                Height = 30,
+                Width = Form.Width,
+                Left = 0,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font(fonts.Families[0], 20, FontStyle.Regular),
+                ForeColor = borderGrey
+            };
+
+            LivesLabel = new Label
+            {
+                Top = 0,
+                Left = 20,
+                Width = 400,
+                Height = 30,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Font = new Font(fonts.Families[0], 20, FontStyle.Regular),
+                ForeColor = borderGrey
+            };
+
+            UpdateTime(this, new EventArgs());
+            
+            Form.Controls.Add(LivesLabel);
+            Form.Controls.Add(ScoreLabel);
+            Form.Controls.Add(TimeLabel);
+        }
+
 
         private void AllBlocksDestroyed(object sender, AllBlocksDestroyedEventArgs e)
         {
@@ -59,6 +156,9 @@ namespace Breakout.classes
         private void PlayerMissedBall(object sender, PlayerMissedEventArgs e)
         {
             LivesLost += 1;
+            UpdateLives();
+            Stopwatch.Stop();
+
             if (!GameOver)
             {
                 ((Ball) sender).RestartIn(1000);
@@ -76,6 +176,7 @@ namespace Breakout.classes
             if (block.Breakable)
             {
                 new Thread(() => Console.Beep(300, 150)).Start();
+                UpdateScore(1);
                 GridController.BreakBlock(block);
                 if (((Ball)sender).Velocity < block.SpeedAfterCollision)
                 {
@@ -106,9 +207,9 @@ namespace Breakout.classes
         {
             Form.BackColor = grid.backColor;
             Form.Width = grid.pxWidth;
-            Form.Height = grid.pxHeight;
+            Form.Height = grid.pxHeight + 30;
 
-            GridController = new GridController(Form, grid.pxWidth, grid.pxHeight, 0, 0, grid.height, grid.width);
+            GridController = new GridController(Form, grid.pxWidth, grid.pxHeight, 30, 0, grid.height, grid.width);
 
             foreach (var block in grid.blocks)
             {
