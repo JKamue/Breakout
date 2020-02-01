@@ -93,8 +93,8 @@ namespace Breakout.classes
             {
                 Top = 0,
                 Height = 30,
-                Width = 70,
-                Left = Form.Width - 80,
+                Width = 140,
+                Left = Form.Width - 140,
                 TextAlign = ContentAlignment.MiddleRight,
                 Text = Score.ToString(),
                 Font = new Font(FontCollection.Families[0], 20, FontStyle.Regular),
