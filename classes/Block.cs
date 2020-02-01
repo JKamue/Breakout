@@ -13,10 +13,20 @@ namespace Breakout.classes
     {
         public bool Breakable;
         public bool Broken = false;
-
+        public int Score;
         public int SpeedAfterCollision;
 
         public Block(int distanceTop, int distanceLeft, Size size, Color color, bool breakable, int speedAfterCollision)
+        {
+            AssignVars(distanceTop, distanceLeft, size, color, breakable, speedAfterCollision, 1);
+        }
+
+        public Block(int distanceTop, int distanceLeft, Size size, Color color, bool breakable, int speedAfterCollision, int score)
+        {
+            AssignVars(distanceTop, distanceLeft, size, color, breakable, speedAfterCollision, score);
+        }
+
+        private void AssignVars(int distanceTop, int distanceLeft, Size size, Color color, bool breakable, int speedAfterCollision, int score)
         {
             this.Top = distanceTop;
             this.Left = distanceLeft;
@@ -27,6 +37,7 @@ namespace Breakout.classes
 
             this.Breakable = breakable;
             this.SpeedAfterCollision = speedAfterCollision;
+            this.Score = score;
         }
     }
 }

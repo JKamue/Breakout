@@ -94,7 +94,7 @@ namespace Breakout.classes
                 Top = 0,
                 Height = 30,
                 Width = 140,
-                Left = Form.Width - 140,
+                Left = Form.Width - 150,
                 TextAlign = ContentAlignment.MiddleRight,
                 Text = Score.ToString(),
                 Font = new Font(FontCollection.Families[0], 20, FontStyle.Regular),
@@ -162,7 +162,7 @@ namespace Breakout.classes
             if (block.Breakable)
             {
                 new Thread(() => Console.Beep(300, 150)).Start();
-                UpdateScore(1);
+                UpdateScore(block.Score);
                 GridController.BreakBlock(block);
                 if (((Ball)sender).Velocity < block.SpeedAfterCollision)
                 {
@@ -210,7 +210,8 @@ namespace Breakout.classes
                     block.colspan,
                     block.rowspan,
                     block.margin,
-                    block.mType);
+                    block.mType,
+                    block.score);
             }
         }
 

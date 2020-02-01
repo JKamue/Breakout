@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -18,8 +19,9 @@ namespace Breakout.dtos
         public int rowspan;
         public int margin;
         public int mType;
+        public int score;
 
-        public BlockDto(int x, int y, Color color, bool breaks, int speed, int colspan, int rowspan, int margin, int mType)
+        public BlockDto(int x, int y, Color color, bool breaks, int speed, int colspan, int rowspan, int margin, int mType, int score)
         {
             this.x = x;
             this.y = y;
@@ -30,6 +32,7 @@ namespace Breakout.dtos
             this.rowspan = rowspan;
             this.margin = margin;
             this.mType = mType;
+            this.score = score;
         }
     }
 }

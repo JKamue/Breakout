@@ -50,7 +50,7 @@ namespace Breakout
         }
 
         public void AddBlock(GridCoordinate coord, Color color, bool breakable, int speedAfterCollision, int colspan,
-            int rowspan, int margin, int marginType)
+            int rowspan, int margin, int marginType, int score)
         {
             if (!CoordinateInGrid(coord))
             {
@@ -85,7 +85,7 @@ namespace Breakout
                 this.BlockSize.Width * colspan - mWidth,
                 this.BlockSize.Height * rowspan - mHeight);
 
-            var block = new Block(distanceTop, distanceLeft, realBlockSize, color, breakable, speedAfterCollision);
+            var block = new Block(distanceTop, distanceLeft, realBlockSize, color, breakable, speedAfterCollision, score);
             this.Grid[coord.X, coord.Y] = block;
             this.Screen.Controls.Add(block);
 
