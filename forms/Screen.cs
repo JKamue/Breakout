@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Breakout.classes;
 using Breakout.dtos;
+using Breakout.forms;
 using Newtonsoft.Json;
 
 namespace Breakout
@@ -19,6 +20,7 @@ namespace Breakout
     {
         private readonly Form MainMenu;
         private Game Game;
+        public GameEndScreen.GameEndButtons ClosingAction;
         public Screen(Form mainMenu, string levelSettings)
         {
             InitializeComponent();

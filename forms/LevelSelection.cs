@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Breakout.classes;
 using Breakout.dtos;
+using Breakout.forms;
 using Newtonsoft.Json;
 
 namespace Breakout
@@ -44,8 +45,14 @@ namespace Breakout
             Hide();
             GameScreen = new Screen(this, LevelManager.Levels[number]);
             GameScreen.ShowDialog();
+            var action = GameScreen.ClosingAction;
             GameScreen.Dispose();
             GameScreen = null;
+
+            if (action == GameEndScreen.GameEndButtons.Restart)
+            {
+                PlayGame(number);
+            }
         }
 
         private void AddAllButtons()

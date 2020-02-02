@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Breakout.dtos;
 using Breakout.events;
+using Breakout.forms;
 using Newtonsoft.Json;
 using Timer = System.Windows.Forms.Timer;
 
@@ -134,10 +135,7 @@ namespace Breakout.classes
         private void AllBlocksDestroyed(object sender, AllBlocksDestroyedEventArgs e)
         {
             StopGame();
-            var sec = Stopwatch.Elapsed.Seconds;
-            var min = Stopwatch.Elapsed.Minutes;
-            MessageBox.Show($"You won after only {min} minutes and {sec} seconds!",
-                    "Congrats!");
+            Form.ClosingAction = GameEndScreen.ShowGameEnd(Score, Lives - LivesLost, Stopwatch, true);
         }
 
         private void PlayerMissedBall(object sender, PlayerMissedEventArgs e)
@@ -152,7 +150,7 @@ namespace Breakout.classes
             else
             {
                 StopGame();
-                MessageBox.Show("You did not manage to win this Level! Maybe next time...", "You Lost!");
+                Form.ClosingAction = GameEndScreen.ShowGameEnd(Score, Lives-LivesLost, Stopwatch, false);
             }
         }
 

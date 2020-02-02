@@ -70,6 +70,12 @@
     <Compile Include="events\AllBlocksDestroyedEvent.cs" />
     <Compile Include="events\PlayerMissedEvent.cs" />
     <Compile Include="exceptions\CoordinatesOutOfBoundsException.cs" />
+    <Compile Include="forms\GameEndScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\GameEndScreen.Designer.cs">
+      <DependentUpon>GameEndScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\LevelSelection.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +90,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="forms\GameEndScreen.aa-ET.resx">
+      <DependentUpon>GameEndScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\GameEndScreen.resx">
+      <DependentUpon>GameEndScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="forms\LevelSelection.resx">
       <DependentUpon>LevelSelection.cs</DependentUpon>
     </EmbeddedResource>
@@ -118,6 +130,11 @@
   <ItemGroup>
     <None Include="Resources\Background.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\replay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\home.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
